@@ -359,3 +359,16 @@ body{
 /* SECTION-IPHONE-DRAW */
 
 /**************************** MAIN ******************************/
+
+/*************************** FOOTER *****************************/
+.footer{
+    border-top: 1px solid #dbd8d8;
+    display: flex;
+    justify-content: center;
+}
+
+.footer-name{
+    margin: 2rem 0;
+    font-weight: 700;
+}
+/*************************** FOOTER *****************************/
