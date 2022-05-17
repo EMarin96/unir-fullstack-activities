@@ -3,6 +3,13 @@ body{
     font-size: 1rem;
 }
 
+.wrapper{
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
 /**************************** HEADER ****************************/
 
 .header{
@@ -11,11 +18,8 @@ body{
 
 .header-container{
     display: flex;
-    max-width: 1200px;
-    margin: 0 auto;
     justify-content: space-between;
     align-items: center;
-    padding: 0 1rem;
 }
 
 .header-container-title{
@@ -64,9 +68,7 @@ body{
 
 /* ARTICLE */
 .article{
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 1rem;
+    padding: 1rem 0;
 }
 
 .article-principal{
@@ -132,23 +134,16 @@ body{
 
 .article-buy-option{
     display: flex;
-}
-
-.article-buy-option-50{
     width: 50%;
 }
 
-.article-buy-last-option{
+.article-buy-option:last-child{
     margin-top: 1rem;
 }
 
 .article-buy-option-description{
     margin: 0;
     padding-left: 1rem;
-}
-
-.article-buy-option-last-description{
-    padding-left: 1.5rem;
 }
 
 .article-buy-option-icon{
@@ -168,6 +163,7 @@ body{
     .article-iphone-description{
         flex-grow: 2;
         flex-basis: 60%;
+        margin-top: 0;
         margin-left: 2rem;
     }
 
@@ -179,12 +175,10 @@ body{
 
     .article-buy-option{
         display: flex;
-        margin: 0;
     }
 
-    .article-buy-option-description{
-        margin: 0;
-        padding-left: 1rem;
+    .article-buy-option:last-child{
+        margin-top: 0;
     }
 }
 /* ARTICLE */
