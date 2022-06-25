@@ -29,9 +29,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             let content = "";
             content += `<p class="m-0">${productoLista.title}</p>`;
             content += `<p class="m-0" id="total-list-${productoLista.SKU}">${producto.getTotal().toFixed(2)} ${json.currency}</p>`;
-            li.classList.add("list-group-item");
-            li.classList.add("d-flex");
-            li.classList.add("justify-content-between");
+            li.classList.add("list-group-item", "d-flex", "justify-content-between");
             li.setAttribute("id", `list-${productoLista.SKU}`);
             li.innerHTML = content;
             productsListEL.appendChild(li);
@@ -84,34 +82,51 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     const loadTable = () => {
-        let contador = 1;
-        json.products.forEach((producto) => {
+        json.products.forEach((producto, index) => {
             const tr = document.createElement("tr");
-            let content = "";
-            content += `<th scope="row" class="fs-5">
-                            ${producto.title}
-                        </th>`;
-            content += `<td class="d-flex gap-2">
-                            <button class="btn btn-secondary" id= "del-button${contador.toString()}">-</button>
-                            <span class="d-inline-block py-2 px-3 border border-secondary rounded-2">0</span>
-                            <button class="btn btn-secondary" id= "add-button${contador.toString()}">+</button>       
-                        </td>`;
-            content += `<td>
-                            ${producto.price} ${carrito.getMoneda()}
-                        </td>`;
-            content += `<td>
-                            0 ${json.currency}
-                        </td>`;
-            tr.innerHTML = content;
-            tbodyEL.appendChild(tr);
+            const th = document.createElement("th");
+            const td1 = document.createElement("td");
+            const td2 = document.createElement("td");
+            const td3 = document.createElement("td");
+            const addButton = document.createElement("button");
+            const delButton = document.createElement("button");
+            const span = document.createElement("span");
 
-            const addButton = document.querySelector(`#add-button${contador.toString()}`);
-            const delButton = document.querySelector(`#del-button${contador.toString()}`);
+            th.setAttribute("scope", "row");
+            th.classList.add("fs-5");
+            th.innerText = producto.title;
+
+            td1.classList.add("d-flex", "gap-2");
+
+            //Se inicializa el botón de agregar
+            addButton.classList.add("btn", "btn-secondary");
             addButton.setAttribute("data-sku", producto.SKU);
-            addButton.addEventListener("click", addProductoClickHandler);
+            addButton.innerText = "+";
+
+            //Se inicializa el span de la cantidad
+            span.classList.add("d-inline-block", "py-2", "px-3", "border", "border-secondary", "rounded-2");
+            span.innerText = "0";
+
+            //Se inicializa el botón de eliminar
+            delButton.classList.add("btn", "btn-secondary");
             delButton.setAttribute("data-sku", producto.SKU);
+            delButton.innerText = "-";
+
+            td1.appendChild(delButton);
+            td1.appendChild(span);
+            td1.appendChild(addButton);
+
+            td2.innerText = `${producto.price} ${carrito.getMoneda()}`
+            td3.innerText = `0 ${json.currency}`;
+
+            tr.appendChild(th);
+            tr.appendChild(td1);
+            tr.appendChild(td2);
+            tr.appendChild(td3);
+            tbodyEL.appendChild(tr);
+            
+            addButton.addEventListener("click", addProductoClickHandler);
             delButton.addEventListener("click", delProductoClickHandler);
-            contador++;
         });
     }
 
