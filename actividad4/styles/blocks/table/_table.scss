@@ -1,0 +1,61 @@
+.table {
+    width: 100%;
+    text-align: left;
+
+    &__row {
+        display: flex;
+        align-items: center;
+    }
+    
+    &__th-title {
+        padding-bottom: 1rem;
+        border-bottom: 1px solid map-get($colors, "gray-300");
+        display: inline-block;
+        flex: 1;
+    }
+
+    &__th-title {
+        font-weight: 400;
+        font-size: 0.9rem;
+    }
+
+    &__product-title {
+        font-weight: 700;
+        font-size: 1.5rem;
+    }
+
+    &__container-quantity {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    &__data {
+        padding: 2rem 0;
+        display: inline-block;
+        flex: 1;
+    }
+
+    &__quantity-input {
+        width: 3rem;
+        padding: 0.5rem 0.2rem;
+        border: 1px solid map-get($colors, "gray-300");
+        border-radius: 6px;
+        text-align: center;
+    }
+
+    &__quantity-input:focus {
+        border: 1px solid map-get($colors, "gray-900");
+        outline: none;
+    }
+
+    &__quantity-btn {
+        border-style: none;
+        border-radius: 6px;
+        padding: 0.5rem 1rem;
+        background-color: transparent;
+    }
+
+    &__quantity-btn:hover {
+        background-color: map-get($colors, "gray-200");
+    }
+}

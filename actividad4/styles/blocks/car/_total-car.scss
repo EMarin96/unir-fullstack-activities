@@ -1,0 +1,40 @@
+.total-car {
+    background-color: map-get($colors, "gray-200");
+    padding: 2rem 1.5rem;
+
+    &__title {
+        font-weight: 700;
+        font-size: 1.5rem;
+    }
+
+    &__list {
+        padding: 1rem 0;
+        margin: 0;
+        list-style: none;
+        border-bottom: 1px solid map-get($colors, "gray-300");
+    }
+
+    &__list-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.2rem 0;
+    }
+
+    &__product-info {
+        padding: 0.2rem 0;
+    }
+
+    &__subtotal {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 1rem;
+    }
+
+    &__subtotal-title {
+        text-transform: uppercase;
+    }
+
+    &__subtotal-price {
+        font-weight: 700;
+    }
+}
