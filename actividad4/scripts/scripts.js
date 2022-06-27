@@ -1,8 +1,10 @@
+const API_URL = "https://jsonblob.com/api/jsonBlob/988949163437998080";
+const REGEX = "^[0-9]";
 const carrito = new Carrito();
 let json = {};
 
 const request = async () => {
-    const response = await fetch("https://jsonblob.com/api/jsonBlob/988949163437998080");
+    const response = await fetch(API_URL);
     const data = await response.json();
     return data;
 };
@@ -14,18 +16,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     json = await request();
 
-    const addProduct = (sku) => {
+    const addProduct = (sku, quantity) => {
         const productoLista = json.products.find(p => p.SKU === sku);
-        const totalQuantity = document.querySelector(".table__quantity-input");
+        const quantityEL = document.querySelector(`[data-sku-input="${sku}"]`);
 
         let producto = carrito.obtenerInformacionProducto(sku);
-        if (typeof producto === "undefined") {
+        if (typeof producto === "undefined" && quantity > 0) {
 
             //Se agrega producto a la clase
             producto = new Producto(sku);
             carrito.guardarProducto(producto);
-            carrito.actualizarUnidades(producto, 1);
-            carrito.calcularTotal();
 
             //Se agrega producto a la lista HTML
             const li = document.createElement("li");
@@ -35,34 +35,33 @@ document.addEventListener("DOMContentLoaded", async () => {
             p1.classList.add("total-car__product-info");
             p1.innerText = productoLista.title;
             p2.classList.add("total-car__product-info");
-            p2.innerText = `${producto.getTotal().toFixed(2)} ${json.currency}`;
-            p2.setAttribute("id", `total-product-${productoLista.SKU}`);
+            p2.setAttribute("data-sku-total", productoLista.SKU);
             li.setAttribute("id", `list-item-${productoLista.SKU}`);
             li.append(p1, p2);
             productsListEL.appendChild(li);
-
-        } else {
-
-            //Se actualiza el producto en la clase
-            carrito.actualizarUnidades(producto, producto.getCantidad() + 1);
-            carrito.calcularTotal();
-
-            //Se actualiza el precio total en la lista HTML
-            const totalProduct = document.querySelector(`#total-product-${productoLista.SKU}`);
-            totalProduct.innerText = `${producto.getTotal().toFixed(2)} ${json.currency}`;
         }
 
-        totalQuantity.value = producto.getCantidad();
-        subtotal.innerText = carrito.getTotal().toFixed(2);
+        //Se actualiza el producto en la clase
+        carrito.actualizarUnidades(producto, quantity);
+        carrito.calcularTotal();
+
+        //Se actualiza el precio total en la lista HTML
+        const totalProduct = document.querySelectorAll(`[data-sku-total="${producto.getSku()}"]`);
+        totalProduct[0].innerText = `${producto.getTotal().toFixed(2)} ${json.currency}`;
+        totalProduct[1].innerText = `${producto.getTotal().toFixed(2)} ${json.currency}`;
+        quantityEL.value = producto.getCantidad();
+        subtotal.innerText = `${carrito.getTotal().toFixed(2)} ${json.currency}`;
     };
 
-    const delProduct = (sku) => {
+    const delProduct = (sku, quantity) => {
         const producto = carrito.obtenerInformacionProducto(sku);
+        const quantityEL = document.querySelector(`[data-sku-input="${sku}"]`);
 
         if (typeof producto === "undefined"){
             alert("Este artículo no se ha ingresado a la lista del carrito");
         } else {
-            if (producto.getCantidad() === 1) {
+            carrito.actualizarUnidades(producto, quantity);
+            if (producto.getCantidad() === 0) {
 
                 //Se elimina el producto de la lista
                 carrito.eliminarProducto(producto);
@@ -71,24 +70,47 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
             //Se actualiza el precio total en la lista HTML
-            carrito.actualizarUnidades(producto, producto.getCantidad() - 1);
             carrito.calcularTotal();
-            const totalList = document.querySelector(`#total-product-${producto.getSku()}`);
-            
-            if (totalList !== null) {
-                totalList.innerText = `${producto.getTotal().toFixed(2)} ${json.currency}`;
+            const totalProduct = document.querySelectorAll(`[data-sku-total="${producto.getSku()}"]`);
+            totalProduct[0].innerText = `${producto.getTotal().toFixed(2)} ${json.currency}`;
+
+            if (totalProduct.length === 2) {
+                totalProduct[1].innerText = `${producto.getTotal().toFixed(2)} ${json.currency}`;
             }
+
+            quantityEL.value = producto.getCantidad() === 0 ? "" : producto.getCantidad();
+            subtotal.innerText = carrito.getTotal().toFixed(2);
         }
     }
 
-    const addProductoClickHandler = (event) => {
-        const sku = event.target.getAttribute("data-sku");
-        addProduct(sku);
+    const inputQuantityClickHandler = (event) => {
+        if (!event.target.value.match(REGEX)) {
+            event.target.value = "";   
+        } 
+
+        const sku = event.target.getAttribute("data-sku-input");
+        const quantity = Number(event.target.value);
+        let producto = carrito.obtenerInformacionProducto(sku);
+
+        if ((typeof producto === "undefined") || (producto.getCantidad() < quantity)) {
+            addProduct(sku, quantity);
+        } else {
+            delProduct(sku, quantity);
+        }
     }
 
-    const delProductoClickHandler = (event) => {
+    const addProductClickHandler = (event) => {
         const sku = event.target.getAttribute("data-sku");
-        delProduct(sku);
+        const quantityEL = document.querySelector(`[data-sku-input="${sku}"]`);
+        const totalQuantity = Number(quantityEL.value) + 1;
+        addProduct(sku, totalQuantity);
+    }
+
+    const delProductClickHandler = (event) => {
+        const sku = event.target.getAttribute("data-sku");
+        const quantityEL = document.querySelector(`[data-sku-input="${sku}"]`);
+        const totalQuantity = Number(quantityEL.value) - 1;
+        delProduct(sku, totalQuantity);
     }
 
     const loadTable = () => {
@@ -122,7 +144,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             input.setAttribute("type", "number");
             input.setAttribute("min", "0");
-            input.setAttribute("data-sku", producto.SKU);
+            input.setAttribute("data-sku-input", producto.SKU);
             input.classList.add("table__quantity-input");
 
             delButton.classList.add("table__quantity-btn");
@@ -136,13 +158,15 @@ document.addEventListener("DOMContentLoaded", async () => {
             td3.classList.add("table__data");
             td4.classList.add("table__data");
             td3.innerText = `${producto.price} ${carrito.getMoneda()}`
-            td4.innerText = `0 ${json.currency}`;
+            td4.innerText = `0.00 ${json.currency}`;
+            td4.setAttribute("data-sku-total", producto.SKU);
 
             tr.append(td1, td2, td3, td4);
             tbodyEL.appendChild(tr);
             
-            addButton.addEventListener("click", addProductoClickHandler);
-            delButton.addEventListener("click", delProductoClickHandler);
+            addButton.addEventListener("click", addProductClickHandler);
+            delButton.addEventListener("click", delProductClickHandler);
+            input.addEventListener("input", inputQuantityClickHandler);
         });
     }
 
