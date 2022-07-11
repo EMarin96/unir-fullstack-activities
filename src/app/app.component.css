@@ -1,0 +1,27 @@
+.header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #D1D5DB;
+}
+
+.wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.header__title {
+    font-size: 1.5rem;
+    color: #1F2937;
+    text-align: center;
+}
+
+.footer {
+    padding: 1.5rem;
+    border-top: 1px solid #D1D5DB;
+    margin-top: 2rem;
+}
+
+.footer__title {
+    text-align: center;
+}
