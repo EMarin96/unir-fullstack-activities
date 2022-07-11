@@ -1,0 +1,37 @@
+<div class="form">
+    <div class="form__control">
+        <label for="title" class="form__label">Título</label>
+        <input type="text" id="title" maxlength="40" class="form__input" [(ngModel)]="title">
+    </div>
+    <div class="form__control">
+        <label for="image" class="form__label">Url de la Imagen</label>
+        <input type="url" id="image" class="form__input" [(ngModel)]="image">
+    </div>
+    <div class="form__control">
+        <label for="text" class="form__label">Texto</label>
+        <textarea id="text" class="form__input form__area" maxlength="245" [(ngModel)]="body"></textarea>
+    </div>
+    <div class="form__control">
+        <label for="date" class="form__label">Fecha de Publicación</label>
+        <input type="date" id="date" class="form__input" [(ngModel)]="date">
+    </div>
+    <button class="form__btn form__btn--success" (click)="saveBlog()">Guardar</button>
+</div>
+<div class="list">
+    <ul class="list__ul">
+        <li class="list__li" *ngFor="let blog of blogs">
+            <div class="list__blog">
+                <h2 class="list__blog-title">
+                    {{ blog.title }}
+                </h2>
+                <div class="list__blog-w-img">
+                    <img [src]="blog.image" [alt]="blog.title" class="list__blog_img">
+                </div>
+                <p class="list__blog-body">
+                    {{ blog.body }}
+                </p>
+                <span>Fecha: {{ blog.date.toLocaleDateString() }}</span>
+            </div>
+        </li>
+    </ul>
+</div>
