@@ -1,0 +1,14 @@
+GET http://localhost:3000/api/autores
+
+###
+GET http://localhost:3000/api/autores/4
+
+###
+POST http://localhost:3000/api/autores
+Content-Type: application/json
+
+{
+    "nombre": "Keylor Herrera",
+    "email": "kherrera@gmail.com",
+    "imagen": "https://randomuser.me/api/portraits/men/75.jpg"
+}
