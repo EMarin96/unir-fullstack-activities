@@ -1,7 +1,7 @@
 GET http://localhost:3000/api/autores
 
 ###
-GET http://localhost:3000/api/autores/4
+GET http://localhost:3000/api/autores/5
 
 ###
 POST http://localhost:3000/api/autores
@@ -11,4 +11,23 @@ Content-Type: application/json
     "nombre": "Keylor Herrera",
     "email": "kherrera@gmail.com",
     "imagen": "https://randomuser.me/api/portraits/men/75.jpg"
+}
+
+###
+GET http://localhost:3000/api/posts
+
+###
+GET http://localhost:3000/api/posts/1
+
+###
+GET http://localhost:3000/api/posts/autor/1
+
+###
+POST http://localhost:3000/api/posts
+Content-Type: application/json
+
+{
+    "titulo": "Fútbol",
+    "descripcion": "El fútbol es el deporte más hermoso del mundo",
+    "autores_id": 5
 }
