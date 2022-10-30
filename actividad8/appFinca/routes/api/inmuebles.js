@@ -1,19 +1,54 @@
 const router = require('express').Router();
+const Inmuebles = require('../../models/inmueble.model');
 
-router.get('/', (req, res) => {
-    res.send('Obtencion de inmuebles');
+router.get('/', async (req, res) => {
+    try {
+        const inmuebles = await Inmuebles.find();
+        res.json(inmuebles);
+    } catch (error) {
+        res.json({ error: error.message });
+    }
 });
 
-router.post('/', (req, res) => {
-    res.send('Creación de inmuebles');
+router.get('/:inmuebleId', async (req, res) => {
+    try {
+        const inmueble = await Inmuebles.findById(req.params.inmuebleId);
+        if (inmueble === null) return res.status(404).json({ error: 'Este inmueble no existe' });
+        res.json(inmueble);
+    } catch (error) {
+        res.json({ error: error.message });
+    }
 });
 
-router.put('/', (req, res) => {
-    res.send('Actualización de inmuebles');
+router.post('/', async (req, res) => {
+    try {
+        const inmuebleAdd = await Inmuebles.create(req.body);
+        res.json(inmuebleAdd);
+    } catch (error) {
+        res.json({ error: error.message });
+    }
 });
 
-router.delete('/', (req, res) => {
-    res.send('Eliminación de inmuebles');
+router.put('/:inmuebleId', async (req, res) => {
+    try {
+        const { inmuebleId } = req.params;
+        const inmuebleMod = await Inmuebles.findByIdAndUpdate(inmuebleId, req.body, { new: true });
+        if (inmuebleMod === null) return res.status(404).json({ error: 'Este inmueble no existe' });
+        res.json(inmuebleMod);
+    } catch (error) {
+        res.json({ error: error.message });
+    }
+});
+
+router.delete('/:inmuebleId', async (req, res) => {
+    try {
+        const { inmuebleId } = req.params;
+        const inmuebleDel = await Inmuebles.findByIdAndRemove(inmuebleId);
+        if (inmuebleDel === null) return res.status(404).json({ error: 'Este inmueble no existe' });
+        res.json(inmuebleDel);
+    } catch (error) {
+        res.json({ error: error.message });
+    }
 });
 
 module.exports = router;

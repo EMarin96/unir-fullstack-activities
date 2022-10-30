@@ -1,10 +1,30 @@
 GET http://localhost:3000/api/inmuebles
 
 ###
+GET http://localhost:3000/api/inmuebles/635f009a49d404b884bd8a23
+
+###
 POST  http://localhost:3000/api/inmuebles
+Content-Type: application/json
+
+{
+    "piso": 3,
+    "letra": "Contrato por 3 años",
+    "extension": 225,
+    "num_habitaciones": 5,
+    "alquilado": false,
+    "propietario": "Pedro Pérez",
+    "mail": "peter78@gmail.com"
+}
 
 ###
-PUT http://localhost:3000/api/inmuebles
+PUT http://localhost:3000/api/inmuebles/635f009a49d404b884bd8a23
+Content-Type: application/json
+
+{
+    "extension": 160,
+    "alquilado": false
+}
 
 ###
-DELETE http://localhost:3000/api/inmuebles
+DELETE http://localhost:3000/api/inmuebles/635f037fe3414b55cabb4f3b
